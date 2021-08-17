@@ -20,7 +20,7 @@ resource "aws_subnet" "sub-1" {
     vpc_id = "${aws_vpc.terraform-vpc.id}"
     cidr_block ="10.158.16.0/26"
     map_public_ip_on_launch = "true"
-    availability_zone = "ap-south-1b"
+    availability_zone = "ap-south-1a"
     tags= {
        Name = "public"
     }
@@ -30,7 +30,7 @@ resource "aws_subnet" "sub-2" {
     vpc_id = "${aws_vpc.terraform-vpc.id}"
     cidr_block ="10.158.16.64/26"
     map_public_ip_on_launch = "true"
-    availability_zone = "ap-south-1a"
+    availability_zone = "ap-south-1b"
     tags= {
        Name = "public"
     }
@@ -282,4 +282,3 @@ output "instance-1" {
 output "instance-2" {
     value = "${aws_instance.terraform_linux_2.id}"
 }
-
