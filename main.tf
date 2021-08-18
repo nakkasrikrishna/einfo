@@ -3,6 +3,13 @@ provider "aws" {
     access_key = var.access
     secret_key = var.secret
 }
+terraform {
+  backend "s3" {
+    bucket = "infoinfo"
+    key    = "terraform.tfstate"
+    region = "ap-south-1"
+  }
+}
 
 
 resource "aws_vpc" "terraform-vpc" {
