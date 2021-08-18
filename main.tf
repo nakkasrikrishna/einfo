@@ -3,14 +3,6 @@ provider "aws" {
     access_key = var.access
     secret_key = var.secret
 }
-terraform {
-  backend "s3" {
-    bucket = "infoinfo"
-    key    = "terraform.tfstate"
-    region = "ap-south-1"
-  }
-}
-
 
 resource "aws_vpc" "terraform-vpc" {
     cidr_block = "10.158.16.0/24"
@@ -22,6 +14,14 @@ resource "aws_vpc" "terraform-vpc" {
         Name = "terraform"
     }
 }
+terraform {
+  backend "s3" {
+    bucket = "infoinfo"
+    key    = "terraform.tfstate"
+    region = "ap-south-1"
+  }
+}
+
 
 resource "aws_subnet" "sub-1" {
     vpc_id = "${aws_vpc.terraform-vpc.id}"
@@ -47,7 +47,7 @@ resource "aws_subnet" "sub-3" {
     vpc_id = "${aws_vpc.terraform-vpc.id}"
     cidr_block ="10.158.16.128/26"
     map_public_ip_on_launch = "true"
-    availability_zone = "ap-south-1b"
+    availability_zone = "ap-south-1c"
     tags= {
        Name = "public"
     }
@@ -110,19 +110,7 @@ resource "aws_route_table_association" "association-subnet-3" {
      route_table_id = "${aws_route_table.rt3.id}"
 }
 
-resource "tls_private_key" "ins_private_key" {
-    algorithm = "RSA"
-    rsa_bits = 4096
-}
-resource "local_file" "private_key" {
-    content = tls_private_key.ins_private_key.private_key_pem
-    filename = "ins_key.pem"
-    file_permission = 0400
-}
-resource "aws_key_pair" "ins_key" {
-    key_name = "instance key"
-    public_key = tls_private_key.ins_private_key.public_key_openssh
-}
+
 
 resource "aws_security_group" "websg" {
     name = "security_instance"
@@ -159,6 +147,7 @@ resource "aws_security_group" "websg" {
 resource "aws_instance" "terraform_linux" {
     ami = "ami-0c1a7f89451184c8b"
     instance_type = "t2.micro"
+    key_name = "einfo"
     associate_public_ip_address = "true"
     vpc_security_group_ids = ["${aws_security_group.websg.id}"]
     subnet_id = "${aws_subnet.sub-1.id}"
@@ -192,6 +181,7 @@ resource "aws_instance" "terraform_linux" {
 resource "aws_instance" "terraform_linux_2" {
     ami = "ami-0c1a7f89451184c8b"
     instance_type = "t2.micro"
+    key_name = "einfo"
     associate_public_ip_address = "true"
     vpc_security_group_ids = ["${aws_security_group.websg.id}"]
     subnet_id = "${aws_subnet.sub-2.id}"
