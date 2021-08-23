@@ -4,6 +4,14 @@ provider "aws" {
     secret_key = var.secret
 }
 
+terraform {
+  backend "s3" {
+    bucket = "infoinfo"
+    key    = "terraform.tfstate"
+    region = "ap-south-1"
+  }
+}
+
 resource "aws_vpc" "terraform-vpc" {
     cidr_block = "10.158.16.0/24"
     instance_tenancy = "default"
