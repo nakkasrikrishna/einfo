@@ -14,13 +14,7 @@ resource "aws_vpc" "terraform-vpc" {
         Name = "terraform"
     }
 }
-terraform {
-  backend "s3" {
-    bucket = "infoinfo"
-    key    = "terraform.tfstate"
-    region = "ap-south-1"
-  }
-}
+
 
 
 resource "aws_subnet" "sub-1" {
